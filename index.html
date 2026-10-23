@@ -1,0 +1,1667 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="AI 投研助手项目介绍：从分散信息到可追溯的研究决策链。">
+  <title>AI 投研助手｜产品项目介绍</title>
+  <style>
+    :root {
+      --paper: #f5f2eb;
+      --white: #fffefa;
+      --ink: #171a1d;
+      --muted: #626b69;
+      --line: #d8d8cf;
+      --green: #0f5b4d;
+      --green-soft: #dce9e2;
+      --navy: #1d3557;
+      --navy-soft: #e2e8f0;
+      --red: #a33a2b;
+      --red-soft: #f2dfda;
+      --gold: #9a6d1f;
+      --gold-soft: #eee4cd;
+      --gray-soft: #e8e8e2;
+      --max: 1180px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 74px;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", Arial, sans-serif;
+      font-size: 16px;
+      line-height: 1.72;
+      letter-spacing: 0;
+    }
+
+    a { color: inherit; }
+
+    .progress {
+      position: fixed;
+      inset: 0 auto auto 0;
+      z-index: 100;
+      width: 0;
+      height: 3px;
+      background: var(--red);
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 90;
+      background: rgba(255, 254, 250, 0.96);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(12px);
+    }
+
+    .topbar-inner {
+      width: min(var(--max), calc(100% - 48px));
+      min-height: 62px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+
+    .brand {
+      flex: 0 0 auto;
+      font-size: 14px;
+      font-weight: 760;
+      color: var(--green);
+      white-space: nowrap;
+    }
+
+    .chapter-nav {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .chapter-nav::-webkit-scrollbar { display: none; }
+
+    .chapter-nav a {
+      position: relative;
+      flex: 0 0 auto;
+      padding: 20px 0 17px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.2;
+      text-decoration: none;
+    }
+
+    .chapter-nav a::after {
+      content: "";
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      height: 2px;
+      background: transparent;
+    }
+
+    .chapter-nav a.active {
+      color: var(--ink);
+      font-weight: 700;
+    }
+
+    .chapter-nav a.active::after { background: var(--green); }
+
+    main { overflow: hidden; }
+
+    .wrap {
+      width: min(var(--max), calc(100% - 48px));
+      margin: 0 auto;
+    }
+
+    .hero {
+      min-height: 690px;
+      display: grid;
+      align-items: center;
+      background: var(--white);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.45fr) minmax(320px, 0.75fr);
+      gap: 86px;
+      align-items: end;
+      padding: 92px 0 72px;
+    }
+
+    .eyebrow,
+    .section-kicker {
+      margin: 0 0 18px;
+      color: var(--gold);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+
+    h1, h2, h3, p { margin-top: 0; }
+
+    h1 {
+      max-width: 760px;
+      margin-bottom: 24px;
+      font-family: "Songti SC", "STSong", Georgia, serif;
+      font-size: 66px;
+      line-height: 1.12;
+      letter-spacing: 0;
+      font-weight: 760;
+    }
+
+    .hero-lead {
+      max-width: 710px;
+      margin-bottom: 32px;
+      color: #3e4846;
+      font-size: 21px;
+      line-height: 1.7;
+    }
+
+    .hero-thesis {
+      max-width: 720px;
+      padding-left: 17px;
+      border-left: 3px solid var(--red);
+      color: var(--ink);
+      font-size: 15px;
+      font-weight: 650;
+    }
+
+    .project-facts {
+      margin: 0;
+      border-top: 2px solid var(--ink);
+    }
+
+    .project-facts div {
+      display: grid;
+      grid-template-columns: 88px 1fr;
+      gap: 14px;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .project-facts dt {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .project-facts dd {
+      margin: 0;
+      font-size: 14px;
+      font-weight: 650;
+    }
+
+    .section {
+      padding: 104px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .section.white { background: var(--white); }
+    .section.dark { color: #f6f7f2; background: #192b29; }
+
+    .section-head {
+      display: grid;
+      grid-template-columns: minmax(250px, 0.72fr) minmax(0, 1.28fr);
+      gap: 74px;
+      align-items: start;
+      margin-bottom: 58px;
+    }
+
+    .section-index {
+      margin: 0 0 12px;
+      color: var(--red);
+      font-family: Georgia, serif;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .section h2 {
+      margin-bottom: 0;
+      font-family: "Songti SC", "STSong", Georgia, serif;
+      font-size: 42px;
+      line-height: 1.25;
+      letter-spacing: 0;
+    }
+
+    .section-intro {
+      margin: 35px 0 0;
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.85;
+    }
+
+    .dark .section-intro { color: #bfc9c5; }
+    .dark .section-kicker { color: #d4b56d; }
+
+    .three-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .pain-card,
+    .principle-card,
+    .result-card {
+      min-height: 210px;
+      padding: 28px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--white);
+    }
+
+    .pain-no {
+      display: block;
+      margin-bottom: 30px;
+      color: var(--red);
+      font-family: Georgia, serif;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .pain-card h3,
+    .principle-card h3,
+    .result-card h3 {
+      margin-bottom: 10px;
+      font-size: 22px;
+      line-height: 1.35;
+    }
+
+    .pain-card p,
+    .principle-card p,
+    .result-card p {
+      margin-bottom: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .statement {
+      display: grid;
+      grid-template-columns: 180px minmax(0, 1fr);
+      gap: 38px;
+      align-items: start;
+      padding: 36px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .statement:last-child { border-bottom: 1px solid var(--line); }
+
+    .statement-label {
+      color: var(--green);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .statement-copy {
+      max-width: 800px;
+      margin: 0;
+      font-family: "Songti SC", "STSong", Georgia, serif;
+      font-size: 27px;
+      line-height: 1.55;
+    }
+
+    .statement-copy strong { color: var(--red); }
+
+    .decision-chain {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      border-top: 1px solid #51625f;
+      border-bottom: 1px solid #51625f;
+    }
+
+    .chain-step {
+      position: relative;
+      min-height: 180px;
+      padding: 24px 18px 22px;
+      border-right: 1px solid #51625f;
+    }
+
+    .chain-step:last-child { border-right: 0; }
+
+    .chain-step:not(:last-child)::after {
+      content: "›";
+      position: absolute;
+      z-index: 2;
+      top: 72px;
+      right: -8px;
+      width: 15px;
+      color: #d4b56d;
+      background: #192b29;
+      font-size: 24px;
+      line-height: 1;
+      text-align: center;
+    }
+
+    .chain-en {
+      display: block;
+      margin-bottom: 35px;
+      color: #8fa29d;
+      font-size: 10px;
+      font-weight: 750;
+    }
+
+    .chain-step strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 17px;
+      line-height: 1.4;
+    }
+
+    .chain-step span:last-child {
+      color: #bfc9c5;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .modules {
+      margin-top: 44px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1px;
+      background: #51625f;
+      border: 1px solid #51625f;
+    }
+
+    .module {
+      min-height: 230px;
+      padding: 30px;
+      background: #203634;
+    }
+
+    .module-wide { grid-column: span 2; }
+
+    .module-tag {
+      display: inline-block;
+      margin-bottom: 22px;
+      padding: 4px 8px;
+      color: #142824;
+      border-radius: 3px;
+      background: #d4b56d;
+      font-size: 10px;
+      font-weight: 800;
+    }
+
+    .module h3 {
+      margin-bottom: 12px;
+      font-size: 23px;
+    }
+
+    .module p {
+      max-width: 760px;
+      margin-bottom: 18px;
+      color: #c7d0cc;
+      font-size: 14px;
+    }
+
+    .inline-flow {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .inline-flow li {
+      padding: 7px 10px;
+      border: 1px solid #58706b;
+      border-radius: 4px;
+      color: #f4f5f0;
+      font-size: 12px;
+    }
+
+    .gate-layout {
+      display: grid;
+      grid-template-columns: 0.78fr 1.22fr;
+      gap: 54px;
+      align-items: start;
+    }
+
+    .gate-stack {
+      border-top: 2px solid var(--ink);
+    }
+
+    .gate {
+      display: grid;
+      grid-template-columns: 52px 1fr;
+      gap: 18px;
+      padding: 26px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .gate-number {
+      color: var(--red);
+      font-family: Georgia, serif;
+      font-size: 25px;
+      font-weight: 700;
+    }
+
+    .gate h3 { margin-bottom: 7px; font-size: 18px; }
+    .gate p { margin-bottom: 0; color: var(--muted); font-size: 14px; }
+
+    .source-table {
+      width: 100%;
+      border-collapse: collapse;
+      border-top: 2px solid var(--ink);
+      font-size: 13px;
+    }
+
+    .source-table th,
+    .source-table td {
+      padding: 15px 12px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .source-table th {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .source-table td:first-child {
+      width: 23%;
+      color: var(--green);
+      font-weight: 750;
+    }
+
+    .data-principle {
+      margin: 34px 0 0;
+      padding: 22px 24px;
+      border-left: 3px solid var(--gold);
+      background: var(--gold-soft);
+      font-size: 14px;
+      font-weight: 650;
+    }
+
+    .ask-agent-section {
+      color: #f4f5f0;
+      background: #11191c;
+    }
+
+    .ask-agent-section .section-intro { color: #b8c3c2; }
+
+    .ask-agent-thesis {
+      display: grid;
+      grid-template-columns: minmax(280px, 0.72fr) minmax(0, 1.28fr);
+      gap: 64px;
+      margin-bottom: 56px;
+      padding: 38px 0;
+      border-top: 1px solid #526063;
+      border-bottom: 1px solid #526063;
+    }
+
+    .ask-agent-thesis h3 {
+      margin-bottom: 10px;
+      font-family: "Songti SC", "STSong", Georgia, serif;
+      font-size: 30px;
+      line-height: 1.4;
+    }
+
+    .ask-agent-thesis p {
+      margin-bottom: 0;
+      color: #b8c3c2;
+      font-size: 14px;
+    }
+
+    .skill-tool-rule {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1px;
+      background: #526063;
+      border: 1px solid #526063;
+    }
+
+    .skill-tool-rule div {
+      min-height: 126px;
+      padding: 24px;
+      background: #182328;
+    }
+
+    .skill-tool-rule span {
+      display: block;
+      margin-bottom: 12px;
+      color: #d4b56d;
+      font-family: Menlo, Consolas, monospace;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .skill-tool-rule strong {
+      display: block;
+      font-size: 17px;
+      line-height: 1.55;
+    }
+
+    .ask-subhead {
+      display: flex;
+      justify-content: space-between;
+      gap: 40px;
+      align-items: end;
+      margin-bottom: 22px;
+    }
+
+    .ask-subhead h3 {
+      margin-bottom: 0;
+      font-size: 22px;
+    }
+
+    .ask-subhead p {
+      max-width: 620px;
+      margin-bottom: 0;
+      color: #94a3a4;
+      font-size: 13px;
+      text-align: right;
+    }
+
+    .ask-mode-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      margin-bottom: 58px;
+      border-top: 1px solid #526063;
+      border-bottom: 1px solid #526063;
+    }
+
+    .ask-mode {
+      min-height: 196px;
+      padding: 24px 20px;
+      border-right: 1px solid #526063;
+    }
+
+    .ask-mode:last-child { border-right: 0; }
+
+    .ask-mode span {
+      display: block;
+      margin-bottom: 30px;
+      color: #d4b56d;
+      font-family: Georgia, serif;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .ask-mode h4 {
+      margin: 0 0 8px;
+      font-size: 18px;
+    }
+
+    .ask-mode p {
+      margin-bottom: 0;
+      color: #aeb9b8;
+      font-size: 12px;
+      line-height: 1.65;
+    }
+
+    .tool-matrix {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 58px;
+    }
+
+    .tool-group {
+      min-height: 270px;
+      padding: 22px 20px;
+      border: 1px solid #465559;
+      border-radius: 4px;
+      background: #182328;
+    }
+
+    .tool-group h4 {
+      margin: 0 0 18px;
+      padding-bottom: 14px;
+      color: #e7c97f;
+      border-bottom: 1px solid #3d4a4e;
+      font-size: 14px;
+    }
+
+    .tool-group ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .tool-group li {
+      position: relative;
+      padding: 5px 0 5px 15px;
+      color: #ced5d3;
+      font-size: 12px;
+    }
+
+    .tool-group li::before {
+      content: "";
+      position: absolute;
+      top: 13px;
+      left: 0;
+      width: 5px;
+      height: 5px;
+      background: #7fae9e;
+    }
+
+    .runtime-flow {
+      display: grid;
+      grid-template-columns: repeat(8, minmax(0, 1fr));
+      border-top: 1px solid #526063;
+      border-bottom: 1px solid #526063;
+    }
+
+    .runtime-step {
+      position: relative;
+      min-height: 155px;
+      padding: 20px 13px;
+      border-right: 1px solid #526063;
+    }
+
+    .runtime-step:last-child { border-right: 0; }
+
+    .runtime-step:not(:last-child)::after {
+      content: "→";
+      position: absolute;
+      z-index: 2;
+      top: 66px;
+      right: -11px;
+      width: 21px;
+      color: #e7c97f;
+      background: #11191c;
+      font-size: 14px;
+      text-align: center;
+    }
+
+    .runtime-step span {
+      display: block;
+      margin-bottom: 28px;
+      color: #7fae9e;
+      font-family: Georgia, serif;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .runtime-step strong {
+      display: block;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .runtime-guardrails {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 18px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .runtime-guardrails li {
+      padding: 7px 10px;
+      color: #bfc9c7;
+      border: 1px solid #465559;
+      border-radius: 3px;
+      font-size: 11px;
+    }
+
+    .ask-mode-note {
+      margin: 26px 0 0;
+      padding-left: 16px;
+      color: #aeb9b8;
+      border-left: 3px solid #a33a2b;
+      font-size: 13px;
+    }
+
+    .mode-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .mode-card {
+      position: relative;
+      min-height: 430px;
+      padding: 30px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--white);
+    }
+
+    .mode-card.recommended { border-top: 5px solid var(--green); }
+    .mode-card.deep { border-top: 5px solid var(--navy); }
+    .mode-card.debate { border-top: 5px solid var(--red); }
+
+    .mode-label {
+      margin-bottom: 28px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .mode-card h3 { margin-bottom: 8px; font-size: 25px; }
+    .mode-use { margin-bottom: 24px; color: var(--muted); font-size: 13px; }
+
+    .agent-flow {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 0 0 26px;
+      padding: 0;
+      list-style: none;
+    }
+
+    .agent-flow li {
+      padding: 6px 9px;
+      border-radius: 3px;
+      background: var(--gray-soft);
+      font-family: Menlo, Consolas, monospace;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .mode-list {
+      margin: 0;
+      padding-left: 18px;
+      color: #414a48;
+      font-size: 14px;
+    }
+
+    .mode-list li { margin-bottom: 10px; }
+
+    .routing-rule {
+      display: grid;
+      grid-template-columns: 180px minmax(0, 1fr);
+      gap: 30px;
+      margin-top: 38px;
+      padding: 30px;
+      color: #f6f7f2;
+      background: var(--green);
+    }
+
+    .routing-rule strong { font-size: 15px; }
+    .routing-rule p { margin: 0; color: #e0ece6; font-size: 14px; }
+
+    .eval-flow {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 46px;
+    }
+
+    .eval-step {
+      min-height: 118px;
+      padding: 20px;
+      border: 1px solid var(--line);
+      background: var(--white);
+    }
+
+    .eval-step span {
+      display: block;
+      margin-bottom: 15px;
+      color: var(--red);
+      font-family: Georgia, serif;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .eval-step strong { font-size: 15px; }
+
+    .evaluation-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(340px, 0.88fr);
+      gap: 56px;
+      align-items: start;
+    }
+
+    .score-list { border-top: 2px solid var(--ink); }
+
+    .score-row {
+      display: grid;
+      grid-template-columns: 1fr 56px;
+      gap: 20px;
+      align-items: center;
+      padding: 15px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .score-meta {
+      display: grid;
+      grid-template-columns: 150px 1fr;
+      gap: 18px;
+      align-items: center;
+    }
+
+    .score-name { font-size: 13px; font-weight: 700; }
+
+    .score-track {
+      height: 7px;
+      overflow: hidden;
+      border-radius: 3px;
+      background: var(--gray-soft);
+    }
+
+    .score-fill { height: 100%; background: var(--green); }
+
+    .score-weight {
+      text-align: right;
+      color: var(--red);
+      font-family: Georgia, serif;
+      font-size: 19px;
+      font-weight: 700;
+    }
+
+    .findings {
+      border-top: 2px solid var(--ink);
+    }
+
+    .finding {
+      padding: 18px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .finding h3 { margin-bottom: 6px; font-size: 16px; }
+    .finding p { margin-bottom: 0; color: var(--muted); font-size: 13px; }
+
+    .model-choice {
+      display: grid;
+      grid-template-columns: minmax(300px, 0.7fr) minmax(0, 1.3fr);
+      gap: 72px;
+      align-items: center;
+      padding: 60px;
+      color: #f4f5f0;
+      background: var(--navy);
+    }
+
+    .model-choice h3 {
+      margin-bottom: 14px;
+      font-family: "Songti SC", "STSong", Georgia, serif;
+      font-size: 32px;
+      line-height: 1.35;
+    }
+
+    .model-choice p { margin-bottom: 0; color: #cdd6e1; font-size: 14px; }
+
+    .model-pair {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .model-role {
+      min-height: 168px;
+      padding: 24px;
+      border: 1px solid #536b8b;
+    }
+
+    .model-role span {
+      display: block;
+      margin-bottom: 34px;
+      color: #9fb0c7;
+      font-size: 10px;
+      font-weight: 800;
+    }
+
+    .model-role strong {
+      display: block;
+      margin-bottom: 7px;
+      font-size: 24px;
+    }
+
+    .model-role small { color: #cdd6e1; font-size: 12px; }
+
+    .model-footnote {
+      margin: 18px 0 0;
+      color: #687173;
+      font-size: 12px;
+    }
+
+    .results-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .result-card {
+      min-height: 230px;
+      padding: 24px;
+    }
+
+    .result-card .result-mark {
+      display: block;
+      margin-bottom: 34px;
+      color: var(--green);
+      font-family: Georgia, serif;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .reflection {
+      display: grid;
+      grid-template-columns: 0.82fr 1.18fr;
+      gap: 60px;
+      margin-top: 64px;
+      padding-top: 56px;
+      border-top: 2px solid var(--ink);
+    }
+
+    .reflection h3 {
+      font-family: "Songti SC", "STSong", Georgia, serif;
+      font-size: 30px;
+      line-height: 1.4;
+    }
+
+    .reflection-list { margin: 0; padding: 0; list-style: none; }
+
+    .reflection-list li {
+      padding: 0 0 20px 28px;
+      position: relative;
+      color: #404946;
+      font-size: 15px;
+    }
+
+    .reflection-list li::before {
+      content: "";
+      position: absolute;
+      top: 10px;
+      left: 0;
+      width: 9px;
+      height: 9px;
+      background: var(--red);
+    }
+
+    .summary-block {
+      padding: 96px 0;
+      color: #f7f6f0;
+      background: #161a1d;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: 250px minmax(0, 1fr);
+      gap: 70px;
+      align-items: start;
+    }
+
+    .summary-grid h2 {
+      font-family: "Songti SC", "STSong", Georgia, serif;
+      font-size: 38px;
+      line-height: 1.3;
+    }
+
+    .spoken-summary {
+      margin-bottom: 0;
+      color: #d4dad7;
+      font-family: "Songti SC", "STSong", Georgia, serif;
+      font-size: 22px;
+      line-height: 1.9;
+    }
+
+    footer {
+      padding: 30px 0;
+      color: #737b78;
+      background: #161a1d;
+      border-top: 1px solid #363c3c;
+      font-size: 12px;
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    @media (max-width: 980px) {
+      .hero-grid,
+      .section-head,
+      .gate-layout,
+      .ask-agent-thesis,
+      .evaluation-layout,
+      .model-choice,
+      .reflection,
+      .summary-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-grid { gap: 54px; }
+      .project-facts { max-width: 620px; }
+      .section-head { gap: 18px; }
+      .section-intro { margin-top: 0; }
+      .decision-chain { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .chain-step:nth-child(3) { border-right: 0; }
+      .chain-step:nth-child(-n + 3) { border-bottom: 1px solid #51625f; }
+      .chain-step:nth-child(3)::after { display: none; }
+      .results-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .ask-mode-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .ask-mode:nth-child(2) { border-right: 0; }
+      .ask-mode:nth-child(-n + 2) { border-bottom: 1px solid #526063; }
+      .tool-matrix { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .runtime-flow { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+      .runtime-step:nth-child(4) { border-right: 0; }
+      .runtime-step:nth-child(-n + 4) { border-bottom: 1px solid #526063; }
+      .runtime-step:nth-child(4)::after { display: none; }
+      .model-choice { gap: 40px; }
+    }
+
+    @media (max-width: 720px) {
+      .topbar-inner,
+      .wrap { width: min(100% - 30px, var(--max)); }
+      .topbar-inner { gap: 20px; }
+      .brand { font-size: 12px; }
+      .chapter-nav { gap: 18px; }
+      .chapter-nav a { padding-top: 21px; font-size: 12px; }
+      .hero { min-height: auto; }
+      .hero-grid { padding: 68px 0 56px; }
+      h1 { font-size: 42px; }
+      .hero-lead { font-size: 18px; }
+      .project-facts div { grid-template-columns: 72px 1fr; }
+      .section { padding: 76px 0; }
+      .section h2 { font-size: 34px; }
+      .section-intro { font-size: 16px; }
+      .three-grid,
+      .mode-grid,
+      .results-grid,
+      .eval-flow,
+      .model-pair {
+        grid-template-columns: 1fr;
+      }
+      .pain-card,
+      .principle-card,
+      .result-card { min-height: auto; }
+      .statement { grid-template-columns: 1fr; gap: 10px; }
+      .statement-copy { font-size: 23px; }
+      .decision-chain { grid-template-columns: 1fr; }
+      .chain-step,
+      .chain-step:nth-child(-n + 3) {
+        min-height: auto;
+        border-right: 0;
+        border-bottom: 1px solid #51625f;
+      }
+      .chain-step:last-child { border-bottom: 0; }
+      .chain-step:not(:last-child)::after { display: none; }
+      .chain-en { margin-bottom: 14px; }
+      .modules { grid-template-columns: 1fr; }
+      .module-wide { grid-column: span 1; }
+      .source-table { display: block; overflow-x: auto; white-space: nowrap; }
+      .ask-agent-thesis { gap: 24px; }
+      .skill-tool-rule,
+      .ask-mode-grid,
+      .tool-matrix,
+      .runtime-flow { grid-template-columns: 1fr; }
+      .ask-subhead { align-items: start; flex-direction: column; gap: 8px; }
+      .ask-subhead p { text-align: left; }
+      .ask-mode,
+      .ask-mode:nth-child(2),
+      .runtime-step,
+      .runtime-step:nth-child(4) {
+        min-height: auto;
+        border-right: 0;
+        border-bottom: 1px solid #526063;
+      }
+      .ask-mode:last-child,
+      .runtime-step:last-child { border-bottom: 0; }
+      .ask-mode span,
+      .runtime-step span { margin-bottom: 12px; }
+      .runtime-step:not(:last-child)::after { display: none; }
+      .tool-group { min-height: auto; }
+      .routing-rule { grid-template-columns: 1fr; gap: 10px; }
+      .mode-card { min-height: auto; }
+      .score-meta { grid-template-columns: 128px 1fr; }
+      .model-choice { padding: 32px 24px; }
+      .spoken-summary { font-size: 19px; }
+      .footer-inner { flex-direction: column; gap: 6px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+    }
+  </style>
+</head>
+<body>
+  <div class="progress" data-progress aria-hidden="true"></div>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">AI 投研助手 · CASE STUDY</div>
+      <nav class="chapter-nav" aria-label="项目章节">
+        <a href="#overview">概览</a>
+        <a href="#problem">问题</a>
+        <a href="#strategy">策略</a>
+        <a href="#system">系统</a>
+        <a href="#data">数据</a>
+        <a href="#ask-agent">问势</a>
+        <a href="#agents">Agent</a>
+        <a href="#evaluation">评测</a>
+        <a href="#learnings">复盘</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="overview">
+      <div class="wrap hero-grid">
+        <div>
+          <p class="eyebrow">Independent Product Project · 2026</p>
+          <h1>AI 投研助手</h1>
+          <p class="hero-lead">把分散的市场信息，转化为一条可追溯、可验证、可复盘的研究决策链。</p>
+          <p class="hero-thesis">我没有把产品定义成“自动给答案的荐股工具”，而是把 AI 放进研究流程中：先建立可靠证据，再辅助形成判断，最后保留决策依据与后续验证。</p>
+        </div>
+        <dl class="project-facts" aria-label="项目概览">
+          <div><dt>项目类型</dt><dd>独立项目</dd></div>
+          <div><dt>我的角色</dt><dd>产品负责人 / Agent 方案设计</dd></div>
+          <div><dt>目标用户</dt><dd>有自主研究需求的个人投资者</dd></div>
+          <div><dt>项目阶段</dt><dd>可运行验证版本</dd></div>
+          <div><dt>核心范围</dt><dd>产品定义、数据方案、Agent 编排、评测框架</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="section" id="problem">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <p class="section-index">01 / PROBLEM</p>
+            <h2>问题不在于信息少，<br>而在于判断没有沉淀</h2>
+          </div>
+          <p class="section-intro">普通人做投资研究时，真正的阻力不是找不到内容，而是资讯、宏观、财务、行情散落在不同入口；当下形成的看法缺少结构化证据；过一段时间又很难说清，当时为什么做出那个判断。</p>
+        </div>
+
+        <div class="three-grid">
+          <article class="pain-card">
+            <span class="pain-no">01</span>
+            <h3>信息零散</h3>
+            <p>资讯、宏观、财报、研报和市场行情分散在多个入口，研究精力被搜索、筛选与搬运反复消耗。</p>
+          </article>
+          <article class="pain-card">
+            <span class="pain-no">02</span>
+            <h3>判断临时</h3>
+            <p>从信息直接跳到结论，缺少结构化的证据链、反方观点和可验证条件，判断质量高度依赖当时状态。</p>
+          </article>
+          <article class="pain-card">
+            <span class="pain-no">03</span>
+            <h3>复盘缺失</h3>
+            <p>标的进入关注范围后，理由、来源、状态变化和最终结果没有被连续记录，经验无法沉淀为方法。</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section white" id="strategy">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <p class="section-index">02 / STRATEGY</p>
+            <h2>我的产品判断</h2>
+          </div>
+          <p class="section-intro">AI 的价值不是替用户承担决策责任，而是降低信息处理成本、固定分析结构、主动暴露风险，并让每一次判断都能回到原始证据。</p>
+        </div>
+
+        <div data-diagram="why-how-what">
+          <div class="statement">
+            <div class="statement-label">WHY · 为什么做</div>
+            <p class="statement-copy">个人投研最缺的不是更多资讯，而是把资讯变成<strong>可解释判断</strong>的稳定过程。</p>
+          </div>
+          <div class="statement">
+            <div class="statement-label">HOW · 怎么解决</div>
+            <p class="statement-copy">用数据质量门禁打底，用分层 Agent 处理不同复杂度任务，用状态化股票池闭合研究与复盘。</p>
+          </div>
+          <div class="statement">
+            <div class="statement-label">WHAT · 产品目标</div>
+            <p class="statement-copy">让用户从“今天发生了什么”，一路走到“我为什么关注、什么条件会推翻判断、后来结果如何”。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section dark" id="system">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <p class="section-kicker">03 / PRODUCT SYSTEM</p>
+            <h2>一条完整决策链，<br>而不是功能堆叠</h2>
+          </div>
+          <p class="section-intro">每个模块都承接上一步的证据与判断，也为下一步提供明确输入。这样，信息浏览、个股研究、筛选和跟踪不再是相互割裂的动作。</p>
+        </div>
+
+        <div class="decision-chain" data-diagram="decision-chain">
+          <div class="chain-step">
+            <span class="chain-en">START</span>
+            <strong>金融资讯日报</strong>
+            <span>捕捉市场主线</span>
+          </div>
+          <div class="chain-step">
+            <span class="chain-en">CONTEXT</span>
+            <strong>宏观与情绪</strong>
+            <span>识别环境温度</span>
+          </div>
+          <div class="chain-step">
+            <span class="chain-en">RESEARCH</span>
+            <strong>个股研报</strong>
+            <span>建立深度证据</span>
+          </div>
+          <div class="chain-step">
+            <span class="chain-en">SCREEN</span>
+            <strong>规则选股</strong>
+            <span>叠加量化因子</span>
+          </div>
+          <div class="chain-step">
+            <span class="chain-en">TRACK</span>
+            <strong>股票池</strong>
+            <span>管理状态与理由</span>
+          </div>
+          <div class="chain-step">
+            <span class="chain-en">REVIEW</span>
+            <strong>模拟执行</strong>
+            <span>跟踪并复盘</span>
+          </div>
+        </div>
+
+        <div class="modules">
+          <article class="module">
+            <span class="module-tag">每日入口</span>
+            <h3>第一眼看市场主线：金融资讯日报</h3>
+            <p>先从多源内容中降噪，再聚合为主题，最后由 AI 提炼主线。输出被固定为四类，避免让用户面对一条无限信息流。</p>
+            <ul class="inline-flow">
+              <li>今日导语 · 概览</li><li>主题排行 · 聚焦</li><li>高分新闻 · 线索</li><li>风险事件 · 预警</li>
+            </ul>
+          </article>
+          <article class="module">
+            <span class="module-tag">研究工作台</span>
+            <h3>从市场线索进入个股研报</h3>
+            <p>报告统一拆为公司质量、增长来源、估值位置、催化因素、主要风险和反证条件，并保留所使用的数据与资料来源。</p>
+            <ul class="inline-flow">
+              <li>事实层</li><li>分析层</li><li>风险层</li><li>验证条件</li>
+            </ul>
+          </article>
+          <article class="module">
+            <span class="module-tag">筛选机制</span>
+            <h3>规则给底线，因子给空间</h3>
+            <p>固定中长期规则保证标准稳定，LLM Ranker 负责在规则内评分排序；量化研究支持因子组合、自定义权重与历史回测。</p>
+            <ul class="inline-flow">
+              <li>基本面规则</li><li>估值约束</li><li>因子组合</li><li>历史检验</li>
+            </ul>
+          </article>
+          <article class="module">
+            <span class="module-tag">状态管理</span>
+            <h3>股票池不是收藏夹</h3>
+            <p>每个标的都携带进入理由、证据来源和历史状态，以“观察 → 可交易 → 持仓 → 归档”推动模拟跟踪与复盘。</p>
+            <ul class="inline-flow">
+              <li>观察</li><li>可交易</li><li>持仓</li><li>归档</li>
+            </ul>
+          </article>
+          <article class="module module-wide">
+            <span class="module-tag">闭环原则</span>
+            <h3>所有结论都必须能返回证据，所有状态变化都必须保留原因。</h3>
+            <p>这是我为产品设定的核心工程约束。它把“看过很多内容”变成“形成过哪些判断”，也为后续评测与复盘提供统一对象。</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section white" id="data">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <p class="section-index">04 / DATA TRUST</p>
+            <h2>先让数据可信，<br>再让模型聪明</h2>
+          </div>
+          <p class="section-intro">开发中最容易被忽视的风险是：接口正常返回，不代表数据有效；代码顺利运行，也不代表计算逻辑正确。错误数据一旦进入模型，表达越流畅，误导反而越强。</p>
+        </div>
+
+        <div class="gate-layout">
+          <div class="gate-stack" data-diagram="data-gates">
+            <div class="gate">
+              <div class="gate-number">01</div>
+              <div>
+                <h3>数据源接入前门禁</h3>
+                <p>分别检查可用性、时效性、准确性。接口是否能调通只是第一步，还要抽样核对日期、单位、缺失值和交叉来源。</p>
+              </div>
+            </div>
+            <div class="gate">
+              <div class="gate-number">02</div>
+              <div>
+                <h3>进入 LLM 前门禁</h3>
+                <p>对清洗、映射和计算过程做独立校验，重点防止历史分位方向颠倒、单位换算错误和字段语义错配。</p>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <table class="source-table" aria-label="数据来源架构">
+              <thead>
+                <tr><th>数据类别</th><th>主来源</th><th>备用与补充</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>行情 / 估值 / 市场宽度</td><td>Tushare 基础、日线、每日指标、指数日线</td><td>新浪财经、efinance、mootdx、Baostock</td></tr>
+                <tr><td>财务 / 分红 / 两融</td><td>Tushare 利润表、资产负债表、现金流、分红、融资融券</td><td>新浪财经、Baostock</td></tr>
+                <tr><td>研报 / 一致预期</td><td>东方财富研报接口</td><td>自建研究资料库</td></tr>
+                <tr><td>公告 / 公司事件</td><td>巨潮资讯与 17 类事件标签</td><td>业绩预告、回购减持、股权激励、重大合同等专项检索</td></tr>
+                <tr><td>新闻 / 开放检索</td><td>东方财富个股新闻、博查</td><td>DuckDuckGo、RSS 与公开新闻源</td></tr>
+                <tr><td>宏观 / 海外市场</td><td>FRED CSV、yfinance</td><td>CPI、利率、失业率、10 年期美债、VIX 等交叉指标</td></tr>
+              </tbody>
+            </table>
+            <p class="data-principle">数据策略：付费数据提供稳定基线，多源数据做互补；每一类关键数据至少保留一条备用路径，切换时记录来源与更新时间。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section ask-agent-section" id="ask-agent">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <p class="section-kicker">05 / ASK AGENT</p>
+            <h2>问势 Agent：<br>从问题到证据</h2>
+          </div>
+          <p class="section-intro">问势 Agent 是整个产品的开放式多轮研究入口。它不预设用户一定从某个功能开始，而是先理解问题、识别标的和研究意图，再选择分析框架与工具，把取数、计算、搜索和解释组织成一次可追溯的研究过程。</p>
+        </div>
+
+        <div class="ask-agent-thesis">
+          <div>
+            <p class="section-kicker">DESIGN PRINCIPLE</p>
+            <h3>模型负责规划与解释，<br>工具负责取数与确定性计算</h3>
+            <p>这样既保留自然语言交互的灵活性，又避免让模型凭记忆回答实时行情、技术指标和历史结果。</p>
+          </div>
+          <div class="skill-tool-rule" aria-label="Skill 与 Tool 的职责边界">
+            <div><span>TOOL</span><strong>Tool 解决“能做什么”<br>获取数据、查询资料、执行计算</strong></div>
+            <div><span>SKILL</span><strong>Skill 解决“按什么方法做”<br>规定证据、判断规则与输出重点</strong></div>
+          </div>
+        </div>
+
+        <div class="ask-subhead">
+          <h3>四种分析框架</h3>
+          <p>默认使用通用分析；用户也可以显式选择研究视角。框架可以组合，但最多同时启用三个，避免上下文堆积、规则冲突和结论失去主次。</p>
+        </div>
+        <div class="ask-mode-grid" data-diagram="ask-agent-skills">
+          <article class="ask-mode">
+            <span>01 · GENERAL</span>
+            <h4>通用分析</h4>
+            <p>综合趋势、量价、筹码、风险与验证条件，适合尚未明确研究视角的开放问题。</p>
+          </article>
+          <article class="ask-mode">
+            <span>02 · TREND</span>
+            <h4>趋势研判</h4>
+            <p>看价格与量能，回答当前怎么走、趋势是否成立，以及什么条件下原判断会失效。</p>
+          </article>
+          <article class="ask-mode">
+            <span>03 · CATALYST</span>
+            <h4>题材催化</h4>
+            <p>看政策、事件、公告与板块反馈，判断为什么现在变化、催化是否真实并可能持续。</p>
+          </article>
+          <article class="ask-mode">
+            <span>04 · GROWTH</span>
+            <h4>成长研究</h4>
+            <p>看收入利润、ROE、现金流、行业空间与估值，判断增长质量和预期是否已经透支。</p>
+          </article>
+        </div>
+
+        <div class="ask-subhead">
+          <h3>18 个工具，按职责分成五类</h3>
+          <p>工具以结构化 Schema 注册。模型只负责选择工具与生成参数，真正的权限检查、调用和结果归一化都在后端执行层完成。</p>
+        </div>
+        <div class="tool-matrix" aria-label="问势 Agent 工具体系">
+          <article class="tool-group">
+            <h4>数据获取 · 7</h4>
+            <ul>
+              <li>实时行情</li><li>历史行情</li><li>筹码分布</li><li>分析上下文</li><li>个股信息</li><li>组合快照</li><li>资金流</li>
+            </ul>
+          </article>
+          <article class="tool-group">
+            <h4>技术分析 · 4</h4>
+            <ul>
+              <li>趋势分析</li><li>均线计算</li><li>量价分析</li><li>形态识别</li>
+            </ul>
+          </article>
+          <article class="tool-group">
+            <h4>搜索研究 · 2</h4>
+            <ul>
+              <li>个股新闻</li><li>综合检索</li>
+            </ul>
+          </article>
+          <article class="tool-group">
+            <h4>市场观察 · 2</h4>
+            <ul>
+              <li>市场指数</li><li>板块排行</li>
+            </ul>
+          </article>
+          <article class="tool-group">
+            <h4>历史验证 · 3</h4>
+            <ul>
+              <li>Skill 回测</li><li>策略回测</li><li>个股回测</li>
+            </ul>
+          </article>
+        </div>
+
+        <div class="ask-subhead">
+          <h3>一次提问如何被完成</h3>
+          <p>运行链路将自然语言问题转成受控工具调用，再把证据组装为事实、推演、风险和验证条件；执行轨迹随回答返回并进入会话记录。</p>
+        </div>
+        <div class="runtime-flow" data-diagram="ask-agent-runtime">
+          <div class="runtime-step"><span>01</span><strong>用户问题</strong></div>
+          <div class="runtime-step"><span>02</span><strong>意图与标的识别</strong></div>
+          <div class="runtime-step"><span>03</span><strong>Skill 路由</strong></div>
+          <div class="runtime-step"><span>04</span><strong>工具计划</strong></div>
+          <div class="runtime-step"><span>05</span><strong>ToolRegistry<br>ToolSurface</strong></div>
+          <div class="runtime-step"><span>06</span><strong>证据组装</strong></div>
+          <div class="runtime-step"><span>07</span><strong>研究输出策略</strong></div>
+          <div class="runtime-step"><span>08</span><strong>流式回答<br>会话记录</strong></div>
+        </div>
+        <ul class="runtime-guardrails" aria-label="工具执行边界">
+          <li>参数校验</li><li>股票范围</li><li>缓存</li><li>超时</li><li>取消</li><li>错误归一化</li><li>来源与时间记录</li><li>研究模式输出清洗</li>
+        </ul>
+        <p class="ask-mode-note"><strong>两层“模式”并不重复：</strong>本章的分析框架决定“从什么视角研究”；下一章的快速、深度、辩论模式决定“用多重的执行链路研究”。框架与执行深度解耦后，产品才能同时兼顾可控性与成本。</p>
+      </div>
+    </section>
+
+    <section class="section" id="agents">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <p class="section-index">06 / AGENT STRATEGY</p>
+            <h2>三种模式，按任务难度分配成本</h2>
+          </div>
+          <p class="section-intro">我没有把多 Agent 当成默认答案。研究任务的复杂度不同，日常摘要、重点个股和高争议问题需要的推理深度也不同，产品需要在速度、成本和可靠性之间主动路由。</p>
+        </div>
+
+        <div class="mode-grid" data-diagram="agent-modes">
+          <article class="mode-card recommended">
+            <div class="mode-label">FAST · 高频默认</div>
+            <h3>快速模式</h3>
+            <p class="mode-use">适合每日简报、批量初筛与低争议任务</p>
+            <ul class="agent-flow"><li>Structured Prompt</li><li>→</li><li>Answer</li></ul>
+            <ul class="mode-list">
+              <li>单次结构化调用，速度快、Token 成本低</li>
+              <li>通过证据约束和固定字段提升日常稳定性</li>
+              <li>主要风险是虚构引用或前后矛盾，需要数据门禁兜底</li>
+            </ul>
+          </article>
+          <article class="mode-card deep">
+            <div class="mode-label">DEEP · 重点研究</div>
+            <h3>深度模式</h3>
+            <p class="mode-use">适合重点个股、复杂公司与结论复核</p>
+            <ul class="agent-flow"><li>Researcher</li><li>Writer</li><li>Critic</li></ul>
+            <ul class="mode-list">
+              <li>Researcher 先整理证据与缺口</li>
+              <li>Writer 形成结构化报告并保留版本</li>
+              <li>Critic 使用另一模型提供方独立审查，避免同源自证</li>
+            </ul>
+          </article>
+          <article class="mode-card debate">
+            <div class="mode-label">DEBATE · 高争议任务</div>
+            <h3>辩论模式</h3>
+            <p class="mode-use">适合分歧明显、信息不完备的研究问题</p>
+            <ul class="agent-flow"><li>Bull</li><li>Bear</li><li>Risk</li><li>Synth</li></ul>
+            <ul class="mode-list">
+              <li>Bull 与 Bear 分别建立正反证据链</li>
+              <li>Risk 专门寻找共同遗漏与尾部风险</li>
+              <li>Synth 不强行求同，而是呈现分歧、假设与触发条件</li>
+            </ul>
+          </article>
+        </div>
+
+        <div class="routing-rule">
+          <strong>关键取舍</strong>
+          <p>更重的链路不等于更好的答案。优化后的快速模式已经能覆盖大部分日常需求；只有当研究价值和不确定性足够高时，才升级到深度或辩论模式，把有限成本花在真正需要推理的地方。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section white" id="evaluation">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <p class="section-index">07 / EVALUATION</p>
+            <h2>用同一份证据，<br>评估模型的真实差异</h2>
+          </div>
+          <p class="section-intro">公开榜单难以代表具体投研任务。这里没有唯一标准答案，真正需要比较的是：同一信息快照下，模型能否聚焦投资逻辑、准确引用数据、识别风险，并在多次运行中保持稳定。</p>
+        </div>
+
+        <div class="eval-flow" data-diagram="evaluation-flow">
+          <div class="eval-step"><span>01</span><strong>一次抓取并冻结研究快照</strong></div>
+          <div class="eval-step"><span>02</span><strong>多个模型并行分析同一输入</strong></div>
+          <div class="eval-step"><span>03</span><strong>按统一量表逐维评分</strong></div>
+          <div class="eval-step"><span>04</span><strong>汇总均值、波动与典型错误</strong></div>
+        </div>
+
+        <div class="evaluation-layout">
+          <div>
+            <div class="score-list" aria-label="六维评测权重">
+              <div class="score-row"><div class="score-meta"><span class="score-name">结构遵循度</span><div class="score-track"><div class="score-fill" style="width:75%"></div></div></div><div class="score-weight">15</div></div>
+              <div class="score-row"><div class="score-meta"><span class="score-name">投资逻辑聚焦</span><div class="score-track"><div class="score-fill" style="width:100%"></div></div></div><div class="score-weight">20</div></div>
+              <div class="score-row"><div class="score-meta"><span class="score-name">数据引用准确性</span><div class="score-track"><div class="score-fill" style="width:100%"></div></div></div><div class="score-weight">20</div></div>
+              <div class="score-row"><div class="score-meta"><span class="score-name">情景分析深度</span><div class="score-track"><div class="score-fill" style="width:75%"></div></div></div><div class="score-weight">15</div></div>
+              <div class="score-row"><div class="score-meta"><span class="score-name">风险识别质量</span><div class="score-track"><div class="score-fill" style="width:75%"></div></div></div><div class="score-weight">15</div></div>
+              <div class="score-row"><div class="score-meta"><span class="score-name">策略可执行性</span><div class="score-track"><div class="score-fill" style="width:75%"></div></div></div><div class="score-weight">15</div></div>
+            </div>
+            <p class="model-footnote">权重合计 100。样本刻意加入低共识、中小市值、冷门行业与 ST 标的，避免只用信息充分的大盘蓝筹得出虚假的稳定结论。</p>
+          </div>
+
+          <div>
+            <div class="findings">
+              <div class="finding">
+                <h3>训练记忆冒充实时事实</h3>
+                <p>部分模型会把过期信息写成当前状态，因此所有时效性陈述都必须回链到冻结快照。</p>
+              </div>
+              <div class="finding">
+                <h3>跨模型一致不等于独立证据</h3>
+                <p>不同模型对估值区间与情景概率常出现趋同，本质上可能来自相近语料与叙事惯性。</p>
+              </div>
+              <div class="finding">
+                <h3>擅长外推，不擅长主动反证</h3>
+                <p>模型容易沿初始观点继续推演，却不会自动回看输入中的冲突信息，所以需要 Critic 与 Risk 角色。</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="model-choice" style="margin-top:64px" data-diagram="model-choice">
+          <div>
+            <p class="section-kicker">MODEL ORCHESTRATION</p>
+            <h3>双模型协作，<br>把规划、分析与复核分开</h3>
+            <p>问势 Agent 不让单一模型包办全过程，而是按能力拆分职责：先规划任务和工具，再基于证据完成分析，最后回到独立视角检查风险与遗漏。</p>
+          </div>
+          <div class="model-pair">
+            <div class="model-role"><span>ANALYSIS &amp; WRITING</span><strong>DeepSeek</strong><small>基于工具返回的证据，负责主要分析、逻辑组织与结构化写作</small></div>
+            <div class="model-role"><span>PLANNING &amp; REVIEW</span><strong>GLM</strong><small>负责 Agent 的任务规划与工具编排，并承担结果复核、风险补充与遗漏检查</small></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="learnings">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <p class="section-index">08 / OUTCOME & LEARNINGS</p>
+            <h2>阶段结果与复盘</h2>
+          </div>
+          <p class="section-intro">当前成果定位为验证版本：我完成了核心流程、数据策略、Agent 路由和评测框架的闭环验证，但不把尚未发生的用户增长或投资收益包装成项目结果。</p>
+        </div>
+
+        <div class="results-grid">
+          <article class="result-card">
+            <span class="result-mark">01</span>
+            <h3>流程被统一</h3>
+            <p>日报、研究、筛选、股票池与复盘被串成同一条决策链，模块之间有明确输入输出。</p>
+          </article>
+          <article class="result-card">
+            <span class="result-mark">02</span>
+            <h3>证据可追溯</h3>
+            <p>事实、分析、风险与验证条件分层保存，结论可以回到对应数据和资料来源。</p>
+          </article>
+          <article class="result-card">
+            <span class="result-mark">03</span>
+            <h3>成本可路由</h3>
+            <p>快速、深度、辩论三种模式按任务难度分配，避免所有问题都调用最重链路。</p>
+          </article>
+          <article class="result-card">
+            <span class="result-mark">04</span>
+            <h3>模型可比较</h3>
+            <p>建立同一快照、统一量表和多轮波动评估，让模型选型从主观体验变成可重复实验。</p>
+          </article>
+        </div>
+
+        <div class="reflection">
+          <h3>这个项目让我重新理解了 AI 产品的价值：不是“让模型多想一步”，而是“让系统少错一步”。</h3>
+          <ul class="reflection-list">
+            <li><strong>数据质量优先于模型能力。</strong> 无效数据进入再强的模型，也只会得到更有说服力的错误。</li>
+            <li><strong>复杂编排必须有使用场景。</strong> 多 Agent 适合高价值、高不确定性任务；高频任务更需要稳定、快速与低成本。</li>
+            <li><strong>一致答案不代表正确。</strong> 真正可靠的系统要主动寻找反证、记录分歧，并说明结论失效的条件。</li>
+            <li><strong>下一阶段验证重点。</strong> 用真实任务记录研究耗时、引用错误率、状态复盘完成率，再决定哪些模块值得产品化投入。</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="summary-block" aria-labelledby="summary-title">
+      <div class="wrap summary-grid">
+        <div>
+          <p class="section-kicker">PROJECT SUMMARY</p>
+          <h2 id="summary-title">项目总结</h2>
+        </div>
+        <p class="spoken-summary">我做的是一款面向个人投资研究者的 AI 投研助手。它解决的不是“信息不够”，而是信息分散、判断临时和无法复盘。我把产品设计成一条从资讯日报、宏观情绪、个股研究，到规则筛选、股票池和模拟跟踪的完整决策链。其中，问势 Agent 作为开放研究入口，用 Skill 固定分析方法，用 18 个工具完成取数、计算、搜索和历史验证，再根据任务难度路由快速、深度和辩论三种执行模式。在模型协作上，由 GLM 负责 Agent 的任务规划、工具编排和结果复核，DeepSeek 基于证据承担主要分析与结构化写作，再由 GLM 补充风险和检查遗漏。这个项目最核心的取舍，是不让 AI 替用户做投资决定，而是让每一次判断都有证据、能被质疑，也能在之后被复盘。</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap footer-inner">
+      <span>AI 投研助手 · 独立产品项目</span>
+      <span>内容仅用于展示产品设计与研究方法，不构成投资建议。</span>
+    </div>
+  </footer>
+
+  <script>
+    (() => {
+      const progress = document.querySelector('[data-progress]');
+      const links = [...document.querySelectorAll('.chapter-nav a')];
+      const sections = links.map((link) => document.querySelector(link.getAttribute('href'))).filter(Boolean);
+
+      const update = () => {
+        const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+        const ratio = maxScroll > 0 ? window.scrollY / maxScroll : 0;
+        progress.style.width = `${Math.min(100, Math.max(0, ratio * 100))}%`;
+
+        const marker = window.scrollY + 120;
+        let current = sections[0];
+        for (const section of sections) {
+          if (section.offsetTop <= marker) current = section;
+        }
+        links.forEach((link) => {
+          const active = current && link.getAttribute('href') === `#${current.id}`;
+          link.classList.toggle('active', active);
+          if (active) link.setAttribute('aria-current', 'true');
+          else link.removeAttribute('aria-current');
+        });
+      };
+
+      update();
+      window.addEventListener('scroll', update, { passive: true });
+      window.addEventListener('resize', update);
+    })();
+  </script>
+</body>
+</html>
